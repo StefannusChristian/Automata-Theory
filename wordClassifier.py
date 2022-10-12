@@ -113,7 +113,7 @@ if __name__ == '__main__':
     bulatRE = '^((\-[0-9]+)|(\+[0-9]+)|([0-9]+))$'
     pecahRE = '^((\-[0-9]+\.[0-9]+)|(\+[0-9]+\.[0-9]+)|([0-9]+\.[0-9]+))$'
     emailRE = '^([a-z0-9_]+@gmail\.com)$'
-    alphanumRE = '^[a-z0-9_]+$'
+    alphanumRE = '^(\w+)$'
     bulanRE = '''^(((J|j)((A|a)(N|n)(U|u)(A|a)(R|r)|(U|u)(N|n|L|l))(I|i))|((M|m)((A|a)(R|r)(E|e)(T|t)|(E|e)(I|i)))|((((S
     |s)(E|e)(P|p)(T|t))|((N|n)(O|o)(V|v))|((D|d)(E|e)(S|s)))((E|e)(M|m))((B|b)(E|e)(R|r)))|((F|f)(E|e)(B
     |b)(R|r)(U|u)(A|a)(R|r)(I|i))|((O|o)(K|k)(T|t)(O|o)(B|b)(E|e)(R|r))|((A|a)((G|g)(U|u)(S|s)(T|t)(U|u)(
@@ -130,7 +130,7 @@ if __name__ == '__main__':
     
     print('\nCara Input: Kata yang terpisah di pisah dengan "_". Contoh: terima_kasih')
     # userInput = input('Enter Your Text: ').lower()
-    userInput = 'Samuel pergi ke Yogyakarta tanggal 10 juni sambil membawa buku kerikil orang entitas fisik objek fisik pinata tempat planet proyektil proyektil Properti wadah memprotes maka makanya makin malah manakala manalagi mangkanya manira mari maupun jakarta kendari mamuju menggoda menakuti uji terima_kasih mencair berpikir bintang_neutron'
+    userInput = 'Samuel pergi ke Yogyakarta tanggal 10 juni sambil membawa buku kerikil orang entitas fisik objek fisik pinata tempat planet proyektil proyektil Properti wadah memprotes maka makanya makin malah manakala manalagi mangkanya manira mari maupun jakarta kendari mamuju menggoda menakuti uji terima_kasih mencair berpikir bintang_neutron stefannus14'
     userInput = userInput.lower()
     userInputSplit = userInput.split(' ')
     userInputSplit = removeUnderscore(userInputSplit)
