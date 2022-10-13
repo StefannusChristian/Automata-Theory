@@ -130,15 +130,17 @@ if __name__ == '__main__':
     
     print('\nCara Input: Kata yang terpisah di pisah dengan "_". Contoh: terima_kasih')
     # userInput = input('Enter Your Text: ').lower()
-    userInput = 'Samuel pergi ke Yogyakarta tanggal 10 juni sambil membawa buku kerikil orang entitas fisik objek fisik pinata tempat planet proyektil proyektil Properti wadah memprotes maka makanya makin malah manakala manalagi mangkanya manira mari maupun jakarta kendari mamuju menggoda menakuti uji terima_kasih mencair berpikir bintang_neutron stefannus14'
+    userInput = 'Samuel pergi ke Yogyakarta tanggal 10 juni sambil membawa buku kerikil orang entitas fisik objek fisik pinata tempat planet proyektil proyektil Properti wadah memprotes maka makanya makin malah manakala manalagi mangkanya manira mari maupun jakarta kendari mamuju menggoda menakuti uji terima_kasih mencair berpikir Bintang_neuTRon stefannus14 A'
+    pureUserInput = userInput.split()
+    print(f'\nInput:\n{pureUserInput}\n')
     userInput = userInput.lower()
     userInputSplit = userInput.split(' ')
     userInputSplit = removeUnderscore(userInputSplit)
+    pureUserInput = removeUnderscore(pureUserInput)
     output = classify(userInputSplit,regexDict)
-    print(f'\nInput:\n{userInput}\n')
     print(f'Output:\n{output}\n')
     print('Detail Output:')
-    detailOutputTable = detailOutput(userInputSplit,output)
+    detailOutputTable = detailOutput(pureUserInput,output)
     print(detailOutputTable)
     print()
 
