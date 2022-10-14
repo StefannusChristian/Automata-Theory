@@ -167,5 +167,3 @@ if __name__ == '__main__':
     detailOutputTable = detailOutput(pureUserInput,output)
     print(detailOutputTable)
     print()
-
-
