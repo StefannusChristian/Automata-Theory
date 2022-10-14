@@ -1,5 +1,6 @@
 import re
 import string
+from tkinter import N
 from prettytable import PrettyTable
 
 # Membuat Function untuk mengecek apakah suatu kata cocok dengan suatu regex
@@ -39,7 +40,7 @@ def removeDots(userInputBeforeClassify):
 # samuel --> alphanumerik, nama
 def classify(userInput: list,regexDict: dict):
     # membuat list untuk menyimpan output
-    output = []
+    output = [] #matrix
     # iterasi semua kata satu per satu dan mengecek apakah kata tersebut "belong" dalam suatu regex
     for word in userInput:
         # karena satu kata bisa termasuk satu atau lebih regex maka buat list category untuk menampung semua kemungkinan yang mungkin
