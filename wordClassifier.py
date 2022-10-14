@@ -14,6 +14,27 @@ def removeUnderscore(userInputDirty):
         cleanUserInput.append(word)
     return cleanUserInput
 
+def removePunctuationExceptDots(userInputDirty):
+    allPunc = string.punctuation
+    allPunc = allPunc.replace('.','')
+    allPunc = allPunc.replace('@','')
+    new_string = userInputDirty.translate(str.maketrans('', '', allPunc))
+    return new_string
+
+def removeDots(userInputBeforeClassify):
+    output = []
+    for words in userInputBeforeClassify:
+        try:
+            float(words)
+        except:
+            if '@' not in words:
+                words = words.replace('.','')
+            elif words[-1] == '.':
+                words = words[:-1]
+        output.append(str(words))
+    return output
+        
+
 # buku -->  alphanumerik, objek
 # samuel --> alphanumerik, nama
 def classify(userInput: list,regexDict: dict):
@@ -77,6 +98,7 @@ def convertToRegex(finalCleanObject:list):
     depan = '^('
     regex = depan + regex
     return regex
+
     
 def makePartikelRegex(txtFile):
     upperCaseLetters = generateUpperCaseList()
@@ -113,7 +135,7 @@ if __name__ == '__main__':
     bulatRE = '^((\-[0-9]+)|(\+[0-9]+)|([0-9]+))$'
     pecahRE = '^((\-[0-9]+\.[0-9]+)|(\+[0-9]+\.[0-9]+)|([0-9]+\.[0-9]+))$'
     emailRE = '^([a-z0-9_]+@gmail\.com)$'
-    alphanumRE = '^(\w+)$'
+    alphanumRE = '^(([a-zA-Z][a-zA-Z0-9]*[0-9]|[0-9][a-zA-Z0-9]*[a-zA-Z])[A-Za-z0-9]*)$'
     bulanRE = '''^(((J|j)((A|a)(N|n)(U|u)(A|a)(R|r)|(U|u)(N|n|L|l))(I|i))|((M|m)((A|a)(R|r)(E|e)(T|t)|(E|e)(I|i)))|((((S
     |s)(E|e)(P|p)(T|t))|((N|n)(O|o)(V|v))|((D|d)(E|e)(S|s)))((E|e)(M|m))((B|b)(E|e)(R|r)))|((F|f)(E|e)(B
     |b)(R|r)(U|u)(A|a)(R|r)(I|i))|((O|o)(K|k)(T|t)(O|o)(B|b)(E|e)(R|r))|((A|a)((G|g)(U|u)(S|s)(T|t)(U|u)(
@@ -129,14 +151,16 @@ if __name__ == '__main__':
     regexDict = {bulatRE:'angka_bulat',pecahRE:'angka_pecahan',emailRE:'email',alphanumRE:'alphanumeric',bulanRE:'bulan',hariRE:'hari',temanRE:'nama',ibukotaRE:'ibu_kota',subjectRE:'subyek',predicateRE:'predikat',objectRE:'obyek',partikelRE:'partikel'}
     
     print('\nCara Input: Kata yang terpisah di pisah dengan "_". Contoh: terima_kasih')
-    # userInput = input('Enter Your Text: ').lower()
-    userInput = 'Samuel pergi ke Yogyakarta tanggal 10 juni sambil membawa buku kerikil orang entitas fisik objek fisik pinata tempat planet proyektil proyektil Properti wadah memprotes maka makanya makin malah manakala manalagi mangkanya manira mari maupun jakarta kendari mamuju menggoda menakuti uji terima_kasih mencair berpikir Bintang_neuTRon stefannus14 A'
+    userInput = input('Enter Your Text: ')
+    userInputForPrint = userInput
     pureUserInput = userInput.split()
-    print(f'\nInput:\n{pureUserInput}\n')
+    print(f'\nInput:\n{userInputForPrint}\n')
     userInput = userInput.lower()
+    userInput = removePunctuationExceptDots(userInput)
     userInputSplit = userInput.split(' ')
     userInputSplit = removeUnderscore(userInputSplit)
     pureUserInput = removeUnderscore(pureUserInput)
+    userInputSplit = removeDots(userInputSplit)
     output = classify(userInputSplit,regexDict)
     print(f'Output:\n{output}\n')
     print('Detail Output:')
