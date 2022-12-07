@@ -7,14 +7,10 @@ class VirtualMachine:
     def get_vm_memory(self): return self.memory
 
     # setter untuk memory
-    def set_vm_memory(self, idx, value):
-        self.memory[idx] = value
+    def set_vm_memory(self, idx, value): self.memory[idx] = value
     
     # method untuk membuang kurung dari string input
-    def remove_braces(self, string):
-        string = string.replace("(","")
-        string = string.replace(")","")
-        return string
+    def remove_braces(self, string): return string.replace("(","").replace(")","")
 
     """
     fungsi untuk ubah angka yang berupa string di txt ke int
@@ -48,7 +44,6 @@ class VirtualMachine:
         variabel pita_value ini isinya bisa +, -, *, /, dan semua integer dari 0 - 9
         """
         pita_value = pita[idx]
-        print(pita_value,' ini pita value')
         """
         Contoh recursion untuk input [0, '*', 3, '+', 1, 2]:
         a,b = 1,2
@@ -72,58 +67,70 @@ class VirtualMachine:
             # pita nya baca /
             elif pita_value == "/": return a / b
 
-    def run(self, _inputs, idx=0):
-        _input = _inputs[idx]
-        print(f'ini input diatas {_input}')    
-        while _input[0] != "end":
-            if _input[0] == "=":
-                memory_idx = _input[1]
-                pita = []
-                for x in range(2, len(_input)): pita.append(_input[x])
+    def run(self, instructions, idx=0):
+        step = instructions[idx]
+        while step[0] != "end":
+            print(f'step =  {step}')    
+            if step[0] == "=":
+                # step =  ['=', 0, '*', 3, '+', 1, 2]
+                memory_idx = step[1]
+                """
+                pita itu buat ambil polish notation nya aja 
+                """
+                pita = step[2:]
+                # pita = ['*', 3, '+', 1, 2]
+                # hitung hasil dari polish notation
                 value = self.calculate_polish_notation(pita, 0)
+                
+                # set memory di index ke idx dengan value 
                 self.set_vm_memory(memory_idx, value)
-                print(self.memory)
+                print(f'Memory = {self.get_vm_memory()}')
 
-            elif _input[0] == "goto":
-                idx = _input[1]
-                _input = _inputs[idx]
+            elif step[0] == "goto":
+                """ 
+                kalau udh masuk sini step itu isinya cuman goto<step-berapa>
+                """
+                # ambil index pengen pergi ke step berapa
+                idx = step[1]
+                step = instructions[idx]
                 continue
 
-            elif _input[0] == "IF":
-                print(f'input = {_input}')
-                condition = [_input[1], _input[2], _input[3]]
+            elif step[0] == "IF":
+                print(f'step = {step}')
+                condition = [step[1], step[2], step[3]]
                 # math_symbol isinya cuman >, <, >=, <=, ==
                 math_symbol = condition[0]
                 next_step = []
-                for i in range(4, len(_input)): next_step.append(_input[i])
+                for i in range(4, len(step)): next_step.append(step[i])
                 if math_symbol == ">":
                     if self.memory[condition[1]] > self.memory[condition[2]]:
-                        _input = next_step
+                        step = next_step
                         continue
 
                 elif math_symbol == "<":
                     if self.memory[condition[1]] < self.memory[condition[2]]:
-                        _input = next_step
+                        step = next_step
                         continue
 
                 elif math_symbol == ">=":
                     if self.memory[condition[1]] >= self.memory[condition[2]]:
-                        _input = next_step
+                        step = next_step
                         continue
 
                 elif math_symbol == "<=":
                     if self.memory[condition[1]] <= self.memory[condition[2]]:
-                        _input = next_step
+                        step = next_step
                         continue
 
                 elif math_symbol == "==":
                     if self.memory[condition[1]] == self.memory[condition[2]]:
-                        _input = next_step
+                        step = next_step
                         continue
 
             idx += 1
-            _input = _inputs[idx]
-            print(f'ini input dibawah {_input}')
+            step = instructions[idx]
+            print(f'next step {step}')
+            print()
 
 def readTxtFile(txtFileName):
     with open(txtFileName) as f: theFile = f.readlines()
@@ -148,5 +155,5 @@ if __name__ == "__main__":
     # clean_instructions = ['(start)', '(= 0 (* 3( + 1 2)))', '(= 1 (* 3( + 0 2)))', '(IF (> 0 1) (goto 6))', '(= 2 (0))', '(goto 7)', '(= 2 (1))', '(end)']
 
     initial_memory = vm.get_vm_memory()
-    print(initial_memory)
+    print(f'Memory = {initial_memory}')
     vm.run(clean_instructions)
