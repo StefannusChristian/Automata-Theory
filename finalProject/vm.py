@@ -69,6 +69,7 @@ class VirtualMachine:
 
     def run(self, instructions, idx=0):
         step = instructions[idx]
+        print(instructions,"INI INSTRUCTIONS")
         while step[0] != "end":
             print(f'step =  {step}')    
             if step[0] == "=":
@@ -83,6 +84,13 @@ class VirtualMachine:
                 value = self.calculate_polish_notation(pita, 0)
                 
                 # set memory di index ke idx dengan value 
+                self.set_vm_memory(memory_idx, value)
+                print(f'Memory = {self.get_vm_memory()}')
+            
+            elif step[0] == "M":
+                print("MASUK SINI!")
+                memory_idx = step[2]
+                value = self.get_vm_memory()[step[3]]
                 self.set_vm_memory(memory_idx, value)
                 print(f'Memory = {self.get_vm_memory()}')
 
