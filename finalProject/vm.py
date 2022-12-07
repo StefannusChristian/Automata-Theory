@@ -1,13 +1,16 @@
 class VirtualMachine:
+    # Constructor
     def __init__(self):
         self.memory = [None, None, None]
     
+    # getter untuk memory
     def get_vm_memory(self): return self.memory
 
-    def set_memory(self, index, value):
-        self.memory[index] = value
-        print(self.memory)
+    # setter untuk memory
+    def set_vm_memory(self, idx, value):
+        self.memory[idx] = value
     
+    # method untuk membuang kurung dari string input
     def remove_braces(self, string):
         string = string.replace("(","")
         string = string.replace(")","")
@@ -24,59 +27,66 @@ class VirtualMachine:
         setelah dibuang kurung nya hasilnya akan menjadi `= 0 * 3 + 1 2`
         """
         no_braces_string = self.remove_braces(string)
-        _input = no_braces_string.split(" ")
-        for i in range(len(_input)):
-            try: _input[i] = int(_input[i])
-            except: pass
-        return _input
+        input_list = no_braces_string.split(" ")
+        # input_list = ['=', '0', '*', '3', '+', '1', '2']
+
+        # membuat list yang isinya string dari 0 - 9
+        numbers = [str(i) for i in range(10)]
+
+        # iterasi input list nya, kalo dia string 0 - 9 maka ubah jadi integer
+        for i in range(len(input_list)): 
+            if input_list[i] in numbers: input_list[i] = int(input_list[i])
+
+        # input_list (yang di return) = ['=', 0, '*', 3, '+', 1, 2]
+        return input_list
     
+    # method untuk check apakah value di pita itu angka atau float
     def pita_value_type_is_number(self,pita_value): return True if isinstance(pita_value,int) or isinstance(pita_value,float) else False
 
-    def poland(self, pita, index):
-        pita_value = pita[index]
+    def calculate_polish_notation(self, pita:list, idx:int):
+        """
+        variabel pita_value ini isinya bisa +, -, *, /, dan semua integer dari 0 - 9
+        """
+        pita_value = pita[idx]
+        print(pita_value,' ini pita value')
+        """
+        Contoh recursion untuk input [0, '*', 3, '+', 1, 2]:
+        a,b = 1,2
+        a,b = 3,3
+        output = 9
+        """
         if self.pita_value_type_is_number(pita_value): return pita_value
         else:
-            a = self.poland(pita, index+1)
-            b = self.poland(pita, index+2)
+            a = self.calculate_polish_notation(pita, idx + 1)
+            b = self.calculate_polish_notation(pita, idx + 2)
 
             # pita nya baca +
-            if pita_value == "+":
-                print(f'a = {a}')
-                print(f'b = {b}')
-                return a + b
+            if pita_value == "+": return a + b
             
             # pita nya baca -
-            elif pita_value == "-":
-                print(f'a = {a}')
-                print(f'b = {b}')
-                return a - b
+            elif pita_value == "-": return a - b
 
             # pita nya baca *
-            elif pita_value == "*":
-                print(f'a = {a}')
-                print(f'b = {b}')
-                return a * b
+            elif pita_value == "*": return a * b
 
             # pita nya baca /
-            elif pita_value == "/":
-                print(f'a = {a}')
-                print(f'b = {b}')
-                return a / b
+            elif pita_value == "/": return a / b
 
     def run(self, _inputs, idx=0):
-        print(f'_inputs = {_inputs}')
         _input = _inputs[idx]
-        print(f'ini input diatas {_input}')        
+        print(f'ini input diatas {_input}')    
         while _input[0] != "end":
             if _input[0] == "=":
-                memory_index = _input[1]
+                memory_idx = _input[1]
                 pita = []
                 for x in range(2, len(_input)): pita.append(_input[x])
-                value = self.poland(pita, 0)
-                self.set_memory(memory_index, value)
+                value = self.calculate_polish_notation(pita, 0)
+                self.set_vm_memory(memory_idx, value)
+                print(self.memory)
 
             elif _input[0] == "goto":
-                _input = _inputs[_input[1]]
+                idx = _input[1]
+                _input = _inputs[idx]
                 continue
 
             elif _input[0] == "IF":
