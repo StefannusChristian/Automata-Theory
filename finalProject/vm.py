@@ -130,6 +130,7 @@ class VirtualMachine:
                 print(f'Memory = {self.get_vm_memory()}')
 
             elif step[0] == "goto":
+                # step = ["goto",6]
                 
                 """ 
                 kalau udh masuk sini step itu isinya cuman goto<step-berapa>
