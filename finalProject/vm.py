@@ -24,7 +24,9 @@ class VirtualMachine:
         """
         no_braces_string = self.remove_braces(string)
         input_list = no_braces_string.split(" ")
-        # input_list = ['=', '0', '*', '3', '+', '1', '2']
+        """ 
+        input_list = ['=', '0', '*', '3', '+', '1', '2']
+        """
 
         # membuat list yang isinya string dari 0 - 9
         numbers = [str(i) for i in range(10)]
@@ -69,12 +71,16 @@ class VirtualMachine:
 
     def run(self, instructions, idx=0):
         step = instructions[idx]
-        print(instructions,"INI INSTRUCTIONS")
+        print(f'{instructions}\n')
         while step[0] != "end":
+            print(f'Jalankan instruksi ke {idx}')
             print(f'step =  {step}')    
             if step[0] == "=":
-                # step =  ['=', 0, '*', 3, '+', 1, 2]
+                """
+                step =  ['=', 0, '*', 3, '+', 1, 2]
+                """
                 memory_idx = step[1]
+
                 """
                 pita itu buat ambil polish notation nya aja 
                 """
@@ -88,9 +94,28 @@ class VirtualMachine:
                 print(f'Memory = {self.get_vm_memory()}')
             
             elif step[0] == "M":
-                print("MASUK SINI!")
+                # pita = ['M', '=', 2, 1]
                 memory_idx = step[2]
-                value = self.get_vm_memory()[step[3]]
+                # operator isinya cuman +, *, /, - , =
+                operator = step[1]
+                if operator == "=": value = self.get_vm_memory()[step[3]]
+                elif operator == "+":
+                    if self.get_vm_memory()[memory_idx] is None:
+                        self.get_vm_memory()[memory_idx] = 0
+                        value = self.get_vm_memory()[memory_idx] + self.get_vm_memory()[step[3]]
+                elif operator == "-":
+                    if self.get_vm_memory()[memory_idx] is None:
+                        self.get_vm_memory()[memory_idx] = 0
+                        value = self.get_vm_memory()[memory_idx] - self.get_vm_memory()[step[3]]
+                elif operator == "*":
+                    if self.get_vm_memory()[memory_idx] is None:
+                        self.get_vm_memory()[memory_idx] = 0
+                        value = self.get_vm_memory()[memory_idx] * self.get_vm_memory()[step[3]]
+                elif operator == "/":
+                    if self.get_vm_memory()[memory_idx] is None:
+                        self.get_vm_memory()[memory_idx] = 0
+                        value = self.get_vm_memory()[memory_idx] / self.get_vm_memory()[step[3]]
+
                 self.set_vm_memory(memory_idx, value)
                 print(f'Memory = {self.get_vm_memory()}')
 
@@ -101,10 +126,12 @@ class VirtualMachine:
                 # ambil index pengen pergi ke step berapa
                 idx = step[1]
                 step = instructions[idx]
+                if step[0] == "end":
+                    print(f'step = {step}') 
+                    print("\nFINISHED!")
                 continue
 
             elif step[0] == "IF":
-                print(f'step = {step}')
                 condition = [step[1], step[2], step[3]]
                 # math_symbol isinya cuman >, <, >=, <=, ==
                 math_symbol = condition[0]
@@ -138,6 +165,7 @@ class VirtualMachine:
             idx += 1
             step = instructions[idx]
             print(f'next step {step}')
+            if step[0] == "end": print("\nFINISHED!")
             print()
 
 def readTxtFile(txtFileName):
@@ -151,8 +179,7 @@ def make_clean_instructons():
     return clean_instructons
 
 if __name__ == "__main__":
-    # biar rapih aja
-    print()
+    print("\nSTART!")
     vm = VirtualMachine()
 
     instructions = readTxtFile('./instructions/instruction-1.txt')
